@@ -8,6 +8,7 @@ import enTranslation from "../locales/en/translation.json";
 import esTranslation from "../locales/es/translation.json";
 import frTranslation from "../locales/fr/translation.json";
 import jaTranslation from "../locales/ja/translation.json";
+import koTranslation from "../locales/ko/translation.json";
 import nlTranslation from "../locales/nl/translation.json";
 import ptBRTranslation from "../locales/ptBR/translation.json";
 import trTranslation from "../locales/tr/translation.json";
@@ -33,6 +34,10 @@ export const supportedLngs: { [key: string]: { name: string; locale: string } } 
     ja: {
         name: "日本語",
         locale: "ja-JP"
+    },
+    ko: {
+        name: "한국어",
+        locale: "ko-KR"
     },
     nl: {
         name: "Nederlands",
@@ -65,6 +70,7 @@ i18next
             es: { translation: esTranslation },
             fr: { translation: frTranslation },
             ja: { translation: jaTranslation },
+            ko: { translation: koTranslation },
             nl: { translation: nlTranslation },
             ptBR: { translation: ptBRTranslation },
             tr: { translation: trTranslation },

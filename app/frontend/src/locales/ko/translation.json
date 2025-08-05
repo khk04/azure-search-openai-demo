@@ -1,0 +1,179 @@
+{
+    "pageTitle": "Azure OpenAI + AI 검색",
+    "headerTitle": "Azure OpenAI + AI 검색",
+    "chat": "채팅",
+    "qa": "질문하기",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "clearChat": "채팅 지우기",
+    "history": {
+        "chatHistory": "채팅 기록",
+        "openChatHistory": "채팅 기록 열기",
+        "noHistory": "채팅 기록이 없습니다",
+        "deleteModalTitle": "채팅 기록 삭제",
+        "deleteModalDescription": "이 작업은 되돌릴 수 없습니다. 이 채팅 기록을 삭제하시겠습니까?",
+        "deleteLabel": "삭제",
+        "cancelLabel": "취소",
+        "today": "오늘",
+        "yesterday": "어제",
+        "last7days": "최근 7일",
+        "last30days": "최근 30일"
+    },
+    "upload": {
+        "fileLabel": "파일 업로드:",
+        "uploadedFilesLabel": "이전에 업로드된 파일:",
+        "noFilesUploaded": "아직 업로드된 파일이 없습니다",
+        "loading": "로딩 중...",
+        "manageFileUploads": "파일 업로드 관리",
+        "uploadingFiles": "파일 업로드 중...",
+        "uploadedFileError": "파일 업로드 오류 - 다시 시도하거나 관리자에게 문의하세요.",
+        "deleteFile": "파일 삭제",
+        "deletingFile": "파일 삭제 중...",
+        "errorDeleting": "삭제 오류.",
+        "fileDeleted": "파일이 삭제되었습니다"
+    },
+    "developerSettings": "개발자 설정",
+
+    "chatEmptyStateTitle": "데이터와 채팅하기",
+    "chatEmptyStateSubtitle": "무엇이든 물어보거나 예시를 시도해보세요",
+    "defaultExamples": {
+        "1": "Northwind Health Plus 플랜에 표준 플랜에 없는 혜택은 무엇입니까?",
+        "2": "성과 평가에서는 어떤 일이 발생합니까?",
+        "3": "제품 관리자는 무엇을 합니까?",
+        "placeholder": "새로운 질문을 입력하세요 (예: 내 플랜에서 연간 안과 검진을 포함합니까?)"
+    },
+    "askTitle": "데이터에 질문하기",
+    "gpt4vExamples": {
+        "1": "금융 시장에서 금리와 GDP의 영향을 비교해보세요.",
+        "2": "향후 5년간 S&P 500 지수의 예상 추이는 무엇입니까? 과거 S&P 500 성과와 비교해보세요",
+        "3": "유가와 주식 시장 동향 사이의 상관관계를 찾을 수 있습니까?",
+        "placeholder": "예시: 내 플랜에서 연간 안과 검진을 포함합니까?"
+    },
+    "generatingAnswer": "답변 생성 중",
+    "citationWithColon": "인용:",
+    "followupQuestions": "후속 질문:",
+
+    "tooltips": {
+        "submitQuestion": "질문 제출",
+        "askWithVoice": "음성으로 질문하기",
+        "stopRecording": "질문 녹음 중지",
+        "showThoughtProcess": "사고 과정 보기",
+        "showSupportingContent": "지원 콘텐츠 보기",
+        "speakAnswer": "답변 읽기",
+        "info": "정보",
+        "save": "저장",
+        "copy": "복사",
+        "copied": "복사됨!"
+    },
+
+    "headerTexts":{
+        "thoughtProcess": "사고 과정",
+        "supportingContent": "지원 콘텐츠",
+        "citation": "인용"
+    },
+
+    "labels": {
+        "toggleMenu": "메뉴 토글",
+        "languagePicker": "언어를 선택하세요",
+        "headerText": "답변 생성 구성",
+        "closeButton": "닫기",
+        "promptTemplate": "프롬프트 템플릿 재정의",
+        "temperature": "온도",
+        "seed": "시드",
+        "minimumSearchScore": "최소 검색 점수",
+        "minimumRerankerScore": "최소 재순위 점수",
+        "retrieveCount": "검색 결과 수:",
+        "maxSubqueryCount": "최대 하위 쿼리 수",
+        "resultsMergeStrategy": "결과 병합 전략",
+        "resultsMergeStrategyOptions": {
+            "interleaved": "교차 배치",
+            "descending": "내림차순"
+        },
+        "includeCategory": "포함 카테고리",
+        "includeCategoryOptions": {
+            "all": "전체"
+        },
+        "excludeCategory": "제외 카테고리",
+        "useSemanticRanker": "검색에 시맨틱 랭커 사용",
+        "useSemanticCaptions": "시맨틱 캡션 사용",
+        "useQueryRewriting": "검색에 쿼리 재작성 사용",
+        "reasoningEffort": "추론 노력도",
+        "reasoningEffortOptions": {
+            "low": "낮음",
+            "medium": "보통",
+            "high": "높음"
+        },
+        "useSuggestFollowupQuestions": "후속 질문 제안",
+        "useAgenticRetrieval": "에이전트 검색 사용",
+        "useGPT4V": "GPT 비전 모델 사용",
+        "gpt4VInput": {
+            "label": "GPT 비전 모델 입력",
+            "options": {
+                "textAndImages": "이미지와 텍스트",
+                "images": "이미지",
+                "texts": "텍스트"
+            }
+        },
+        "retrievalMode": {
+            "label": "검색 모드",
+            "options": {
+                "hybrid": "벡터 + 텍스트 (하이브리드)",
+                "vectors": "벡터",
+                "texts": "텍스트"
+            }
+        },
+        "vector": {
+            "label": "벡터 필드 (다중 쿼리 벡터 검색)",
+            "options": {
+                "embedding": "텍스트 임베딩",
+                "imageEmbedding": "이미지 임베딩",
+                "both": "텍스트 및 이미지 임베딩"
+            }
+        },
+        "useOidSecurityFilter": "OID 보안 필터 사용",
+        "useGroupsSecurityFilter": "그룹 보안 필터 사용",
+        "shouldStream": "채팅 완료 응답 스트리밍"
+    },
+
+    "helpTexts": {
+        "promptTemplate":
+            "질문과 검색 결과를 기반으로 답변을 생성하는 데 사용되는 프롬프트를 재정의합니다. 전체 프롬프트를 교체하는 대신 기존 프롬프트에 추가하려면 프롬프트를 '>>>'로 시작하세요.",
+        "temperature":
+            "답변을 생성하는 LLM 요청의 온도를 설정합니다. 높은 온도는 더 창의적인 응답을 만들지만 덜 정확할 수 있습니다.",
+        "seed": "모델 응답의 재현성을 향상시키기 위한 시드를 설정합니다. 시드는 모든 정수가 될 수 있습니다.",
+        "searchScore":
+             "Azure AI 검색에서 돌아오는 검색 결과의 최소 점수를 설정합니다. 점수 범위는 하이브리드(기본값), 벡터만, 또는 텍스트만 사용하는지에 따라 달라집니다.",
+        "rerankerScore":
+             "시맨틱 재순위 지정자에서 돌아오는 검색 결과의 최소 점수를 설정합니다. 점수는 항상 0-4 범위입니다. 점수가 높을수록 결과가 질문과 더 의미적으로 관련이 있습니다.",
+        "retrieveNumber":
+             "Azure AI 검색에서 검색할 검색 결과 수를 설정합니다. 더 많은 결과는 올바른 답변을 찾을 가능성을 높일 수 있지만 모델이 '중간에서 길을 잃을' 수 있습니다.",
+        "maxSubqueryCount":
+            "에이전트 검색 쿼리 계획에 사용할 최대 하위 쿼리 수를 설정합니다.",
+        "resultsMergeStrategy":
+            "여러 하위 쿼리의 결과를 병합하는 전략을 설정합니다. 교차 배치는 각 하위 쿼리에서 최상위 결과를 라운드 로빈 순서로 선택하고, 내림차순은 모든 결과를 재순위 점수로 정렬합니다.",
+        "includeCategory":
+            "검색 결과에 포함할 카테고리를 지정합니다. 기본 데이터 세트에는 사용되는 카테고리가 없습니다.",
+         "excludeCategory":
+            "검색 결과에서 제외할 카테고리를 지정합니다. 기본 데이터 세트에는 사용되는 카테고리가 없습니다.",
+         "useSemanticReranker":
+            "사용자 쿼리에 대한 의미적 유사성을 기반으로 검색 결과를 재순위하는 모델인 Azure AI Search 시맨틱 랭커를 활성화합니다.",
+        "useQueryRewriting":
+            "검색 결과를 개선하기 위해 사용자의 쿼리를 수정하는 과정인 Azure AI Search 쿼리 재작성을 활성화합니다. 시맨틱 랭커가 활성화되어야 합니다.",
+        "reasoningEffort":
+            "LLM의 추론 노력도를 설정합니다. 높은 값은 더 많은 추론을 결과로 하지만 응답 생성에 더 오래 걸릴 수 있습니다. 기본값은 보통입니다.",
+        "useSemanticCaptions":
+             "전체 검색 결과 대신 시맨틱 캡션을 LLM에 보냅니다. 시맨틱 캡션은 시맨틱 순위 지정 과정에서 검색 결과에서 추출됩니다.",
+        "suggestFollowupQuestions": "사용자의 쿼리를 기반으로 후속 질문을 제안하도록 LLM에 요청합니다.",
+         "useGPT4Vision": "인덱스의 이미지와 텍스트를 기반으로 응답을 생성하기 위해 GPT-4-Turbo with Vision을 사용합니다.",
+        "vectorFields":
+            "Azure AI Search Index에서 검색될 임베딩 필드를 지정합니다. '이미지와 텍스트' 임베딩, '이미지'만, 또는 '텍스트'만입니다.",
+        "gpt4VisionInputs":
+            "비전 모델에 전송될 내용을 설정합니다. '이미지와 텍스트'는 이미지와 텍스트를 모두 모델에 보내고, '이미지'는 이미지만, '텍스트'는 텍스트만 보냅니다.",
+        "retrievalMode":
+            "Azure AI Search 쿼리의 검색 모드를 설정합니다. '벡터 + 텍스트 (하이브리드)'는 벡터 검색과 전체 텍스트 검색의 조합을 사용하고, '벡터'는 벡터 검색만, '텍스트'는 전체 텍스트 검색만 사용합니다. 하이브리드가 일반적으로 최적입니다.",
+        "streamChat": "응답이 생성되는 동안 채팅 UI에 지속적으로 스트리밍합니다.",
+        "useOidSecurityFilter": "인증된 사용자의 OID를 기반으로 검색 결과를 필터링합니다.",
+        "useGroupsSecurityFilter": "인증된 사용자의 그룹을 기반으로 검색 결과를 필터링합니다.",
+        "useAgenticRetrieval": "다중 쿼리 계획을 위한 Azure AI Search의 에이전트 검색을 사용합니다. 항상 시맨틱 랭커를 사용합니다."
+    }
+}
