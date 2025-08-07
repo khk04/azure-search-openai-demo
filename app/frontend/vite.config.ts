@@ -21,10 +21,17 @@ export default defineConfig({
                     } else if (id.includes("node_modules")) {
                         return "vendor";
                     }
-                }
+                },
+                // Ensure consistent hashing
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash].[ext]'
             }
         },
-        target: "esnext"
+        target: "esnext",
+        // Ensure consistent builds
+        cssCodeSplit: true,
+        assetsInlineLimit: 4096
     },
     server: {
         proxy: {
