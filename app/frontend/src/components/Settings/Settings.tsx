@@ -49,6 +49,7 @@ export interface SettingsProps {
     showSuggestFollowupQuestions?: boolean;
     showAgenticRetrievalOption: boolean;
     useAgenticRetrieval: boolean;
+    useStructuredResponse?: boolean;
 }
 
 export const Settings = ({
@@ -89,7 +90,8 @@ export const Settings = ({
     promptTemplateSuffix,
     showSuggestFollowupQuestions,
     showAgenticRetrievalOption,
-    useAgenticRetrieval
+    useAgenticRetrieval,
+    useStructuredResponse
 }: SettingsProps) => {
     const { t } = useTranslation();
 
@@ -415,6 +417,16 @@ export const Settings = ({
                     onRenderLabel={props =>
                         renderLabel(props, suggestFollowupQuestionsId, suggestFollowupQuestionsFieldId, t("helpTexts.suggestFollowupQuestions"))
                     }
+                />
+            )}
+
+            {/* Structured Response checkbox for Ask */}
+            {useStructuredResponse !== undefined && (
+                <Checkbox
+                    className={styles.settingsSeparator}
+                    checked={useStructuredResponse}
+                    label="구조화된 응답 (요약 + 차트)"
+                    onChange={(_ev, checked) => onChange("useStructuredResponse", !!checked)}
                 />
             )}
         </div>

@@ -48,6 +48,7 @@ export function Component(): JSX.Element {
     const [showSemanticRankerOption, setShowSemanticRankerOption] = useState<boolean>(false);
     const [showQueryRewritingOption, setShowQueryRewritingOption] = useState<boolean>(false);
     const [showReasoningEffortOption, setShowReasoningEffortOption] = useState<boolean>(false);
+    const [useStructuredResponse, setUseStructuredResponse] = useState<boolean>(false);
     const [showVectorOption, setShowVectorOption] = useState<boolean>(false);
     const [showUserUpload, setShowUserUpload] = useState<boolean>(false);
     const [showLanguagePicker, setshowLanguagePicker] = useState<boolean>(false);
@@ -156,6 +157,7 @@ export function Component(): JSX.Element {
                         gpt4v_input: gpt4vInput,
                         language: i18n.language,
                         use_agentic_retrieval: useAgenticRetrieval,
+                        structured_response: useStructuredResponse,
                         ...(seed !== null ? { seed: seed } : {})
                     }
                 },
@@ -242,6 +244,12 @@ export function Component(): JSX.Element {
                 break;
             case "useAgenticRetrieval":
                 setUseAgenticRetrieval(value);
+                break;
+            case "useStructuredResponse":
+                setUseStructuredResponse(value);
+                break;
+            default:
+                break;
         }
     };
 
@@ -381,6 +389,7 @@ export function Component(): JSX.Element {
                     requireAccessControl={requireAccessControl}
                     showAgenticRetrievalOption={showAgenticRetrievalOption}
                     useAgenticRetrieval={useAgenticRetrieval}
+                    useStructuredResponse={useStructuredResponse}
                     onChange={handleSettingsChange}
                 />
                 {useLogin && <TokenClaimsDisplay />}
