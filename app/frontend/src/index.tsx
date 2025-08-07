@@ -10,6 +10,7 @@ import "./index.css";
 import Chat from "./pages/chat/Chat";
 import LayoutWrapper from "./layoutWrapper";
 import i18next from "./i18n/config";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 initializeIcons();
 
@@ -36,10 +37,12 @@ const router = createHashRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <I18nextProvider i18n={i18next}>
-            <HelmetProvider>
-                <RouterProvider router={router} />
-            </HelmetProvider>
-        </I18nextProvider>
+        <ErrorBoundary>
+            <I18nextProvider i18n={i18next}>
+                <HelmetProvider>
+                    <RouterProvider router={router} />
+                </HelmetProvider>
+            </I18nextProvider>
+        </ErrorBoundary>
     </React.StrictMode>
 );
