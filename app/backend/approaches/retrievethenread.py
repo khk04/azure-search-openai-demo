@@ -1,3 +1,5 @@
+import json
+import logging
 from typing import Any, Optional, cast
 
 from azure.search.documents.agent.aio import KnowledgeAgentRetrievalClient
@@ -9,6 +11,8 @@ from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
 from approaches.approach import Approach, DataPoints, ExtraInfo, ThoughtStep
 from approaches.promptmanager import PromptManager
 from core.authentication import AuthenticationHelper
+
+logger = logging.getLogger(__name__)
 
 
 class RetrieveThenReadApproach(Approach):
@@ -61,6 +65,7 @@ class RetrieveThenReadApproach(Approach):
         self.query_speller = query_speller
         self.prompt_manager = prompt_manager
         self.answer_prompt = self.prompt_manager.load_prompt("ask_answer_question.prompty")
+        self.structured_answer_prompt = self.prompt_manager.load_prompt("ask_answer_question_structured.prompty")
         self.reasoning_effort = reasoning_effort
         self.include_token_usage = True
 
@@ -73,6 +78,7 @@ class RetrieveThenReadApproach(Approach):
         overrides = context.get("overrides", {})
         auth_claims = context.get("auth_claims", {})
         use_agentic_retrieval = True if overrides.get("use_agentic_retrieval") else False
+        use_structured_response = overrides.get("structured_response", False)
         q = messages[-1]["content"]
         if not isinstance(q, str):
             raise ValueError("The most recent message content must be a string.")
@@ -82,9 +88,12 @@ class RetrieveThenReadApproach(Approach):
         else:
             extra_info = await self.run_search_approach(messages, overrides, auth_claims)
 
+        # Choose appropriate prompt based on structured response requirement
+        selected_prompt = self.structured_answer_prompt if use_structured_response else self.answer_prompt
+
         # Process results
         messages = self.prompt_manager.render_prompt(
-            self.answer_prompt,
+            selected_prompt,
             self.get_system_prompt_variables(overrides.get("prompt_template"))
             | {"user_query": q, "text_sources": extra_info.data_points.text},
         )
@@ -109,9 +118,15 @@ class RetrieveThenReadApproach(Approach):
                 usage=chat_completion.usage,
             )
         )
+
+        # Handle structured response with JSON parsing and fallback
+        response_content = chat_completion.choices[0].message.content
+        if use_structured_response:
+            response_content = self._handle_structured_response(response_content)
+
         return {
             "message": {
-                "content": chat_completion.choices[0].message.content,
+                "content": response_content,
                 "role": chat_completion.choices[0].message.role,
             },
             "context": extra_info,
@@ -230,3 +245,49 @@ class RetrieveThenReadApproach(Approach):
             ],
         )
         return extra_info
+
+    def _handle_structured_response(self, response_content: str) -> str:
+        """
+        Handle structured JSON response with fallback to plain text.
+        
+        Args:
+            response_content: The raw response content from GPT
+            
+        Returns:
+            Either valid JSON string or fallback plain text
+        """
+        if not response_content:
+            return json.dumps({
+                "summary": "No response generated.",
+                "chart_data": []
+            })
+
+        try:
+            # Try to parse as JSON to validate structure
+            parsed_json = json.loads(response_content)
+            
+            # Validate required fields
+            if not isinstance(parsed_json, dict):
+                raise ValueError("Response is not a JSON object")
+            
+            if "summary" not in parsed_json or "chart_data" not in parsed_json:
+                raise ValueError("Missing required fields: summary or chart_data")
+            
+            # Validate chart_data is an array
+            if not isinstance(parsed_json["chart_data"], list):
+                raise ValueError("chart_data must be an array")
+            
+            # Return the valid JSON string
+            return response_content
+            
+        except (json.JSONDecodeError, ValueError) as e:
+            logger.warning(f"Failed to parse structured response as JSON: {e}")
+            logger.warning(f"Raw response: {response_content}")
+            
+            # Fallback: wrap the plain text response in JSON structure
+            fallback_response = {
+                "summary": response_content,
+                "chart_data": []
+            }
+            
+            return json.dumps(fallback_response, ensure_ascii=False)

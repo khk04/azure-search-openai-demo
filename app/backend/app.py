@@ -111,7 +111,12 @@ mimetypes.add_type("text/css", ".css")
 
 @bp.route("/")
 async def index():
-    return await bp.send_static_file("index.html")
+    response = await bp.send_static_file("index.html")
+    # Prevent caching of index.html to ensure latest asset references
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 # Empty page is recommended for login redirect to work.
@@ -128,7 +133,11 @@ async def favicon():
 
 @bp.route("/assets/<path:path>")
 async def assets(path):
-    return await send_from_directory(Path(__file__).resolve().parent / "static" / "assets", path)
+    response = await send_from_directory(Path(__file__).resolve().parent / "static" / "assets", path)
+    # Add cache control headers for static assets
+    response.headers['Cache-Control'] = 'public, max-age=31536000'  # 1 year for assets with hash
+    response.headers['ETag'] = f'"{hash(path)}"'
+    return response
 
 
 @bp.route("/content/<path>")
