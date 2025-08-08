@@ -5,6 +5,8 @@ import DOMPurify from "dompurify";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 import styles from "./Answer.module.css";
 import { ChatAppResponse, getCitationFilePath, SpeechConfig } from "../../api";
@@ -94,6 +96,58 @@ export const Answer = ({
             .catch(err => console.error("Failed to copy text: ", err));
     };
 
+    const handleSavePDF = async () => {
+        const reportElement = document.getElementById(`report-section-${index}`);
+        if (!reportElement) {
+            console.error("Report section not found");
+            return;
+        }
+
+        try {
+            // html2canvas를 사용하여 DOM 요소를 캔버스로 변환
+            const canvas = await html2canvas(reportElement, {
+                scale: 2, // 고화질을 위한 스케일
+                useCORS: true,
+                logging: false,
+                backgroundColor: "#ffffff"
+            });
+
+            // jsPDF로 PDF 생성
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4"
+            });
+
+            const imgWidth = 210; // A4 너비 (mm)
+            const pageHeight = 297; // A4 높이 (mm)
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
+
+            const imgData = canvas.toDataURL("image/png");
+            let position = 0;
+
+            // 첫 페이지 추가
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            // 필요한 경우 추가 페이지 생성
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            // PDF 다운로드
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, "-");
+            pdf.save(`AI-Report-${timestamp}.pdf`);
+        } catch (error) {
+            console.error("PDF 생성 중 오류 발생:", error);
+            alert("PDF 생성 중 오류가 발생했습니다.");
+        }
+    };
+
     return (
         <Stack className={`${styles.answerContainer} ${isSelected && styles.selected}`} verticalAlign="space-between">
             <Stack.Item>
@@ -123,6 +177,17 @@ export const Answer = ({
                             onClick={() => onSupportingContentClicked()}
                             disabled={!answer.context.data_points || isStreaming}
                         />
+                        {/* PDF 저장 버튼 - 구조화된 응답이 있을 때만 표시 */}
+                        {structuredResponse && (
+                            <IconButton
+                                style={{ color: "black" }}
+                                iconProps={{ iconName: "PDF" }}
+                                title="PDF로 저장"
+                                ariaLabel="PDF로 저장"
+                                onClick={handleSavePDF}
+                                disabled={isStreaming}
+                            />
+                        )}
                         {showSpeechOutputAzure && (
                             <SpeechOutputAzure answer={sanitizedAnswerHtml} index={index} speechConfig={speechConfig} isStreaming={isStreaming} />
                         )}
@@ -132,19 +197,19 @@ export const Answer = ({
             </Stack.Item>
 
             <Stack.Item grow>
-                <div className={styles.answerText}>
-                    <ReactMarkdown children={displayContent} rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} />
+                {/* PDF 저장을 위한 report-section div */}
+                <div id={`report-section-${index}`} className={styles.reportSection}>
+                    <div className={styles.answerText}>
+                        <ReactMarkdown children={displayContent} rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} />
+                    </div>
+
+                    {/* 구조화된 응답의 차트 데이터 표시 */}
+                    {structuredResponse && structuredResponse.chart_data.length > 0 && (
+                        <Suspense fallback={<Spinner label="차트 로딩 중..." />}>
+                            <AnswerChart chartData={structuredResponse.chart_data} title="데이터 시각화" />
+                        </Suspense>
+                    )}
                 </div>
-                
-                {/* 구조화된 응답의 차트 데이터 표시 */}
-                {structuredResponse && structuredResponse.chart_data.length > 0 && (
-                    <Suspense fallback={<Spinner label="차트 로딩 중..." />}>
-                        <AnswerChart 
-                            chartData={structuredResponse.chart_data}
-                            title="데이터 시각화"
-                        />
-                    </Suspense>
-                )}
             </Stack.Item>
 
             {!!parsedAnswer.citations.length && (

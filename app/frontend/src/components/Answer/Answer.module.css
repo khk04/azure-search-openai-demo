@@ -141,3 +141,11 @@ sup {
     content: "";
     animation: loading 1s infinite;
 }
+
+.reportSection {
+    padding: 1em;
+    background: white;
+    border-radius: 0.5em;
+    margin: 0.5em 0;
+    border: 1px solid #e0e0e0;
+}
