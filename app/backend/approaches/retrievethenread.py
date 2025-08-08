@@ -105,7 +105,11 @@ class RetrieveThenReadApproach(Approach):
                 self.chatgpt_model,
                 messages=messages,
                 overrides=overrides,
-                response_token_limit=self.get_response_token_limit(self.chatgpt_model, 1024),
+                # Increase token limit for structured responses to reduce JSON truncation
+                response_token_limit=self.get_response_token_limit(
+                    self.chatgpt_model,
+                    2048 if use_structured_response else 1024,
+                ),
             ),
         )
         extra_info.thoughts.append(
@@ -283,7 +287,31 @@ class RetrieveThenReadApproach(Approach):
         except (json.JSONDecodeError, ValueError) as e:
             logger.warning(f"Failed to parse structured response as JSON: {e}")
             logger.warning(f"Raw response: {response_content}")
-            
+            # Attempt to salvage JSON by extracting the largest valid JSON object fragment
+            try:
+                start_idx = response_content.find("{")
+                end_idx = response_content.rfind("}")
+                if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+                    candidate = response_content[start_idx : end_idx + 1]
+                    candidate_json = json.loads(candidate)
+
+                    # Ensure required fields exist; if missing, wrap into expected structure
+                    if not isinstance(candidate_json, dict):
+                        raise ValueError("Candidate JSON is not an object")
+
+                    if "summary" not in candidate_json or "chart_data" not in candidate_json:
+                        candidate_json = {
+                            "summary": candidate_json if isinstance(candidate_json, str) else response_content,
+                            "chart_data": [],
+                        }
+
+                    if not isinstance(candidate_json.get("chart_data", []), list):
+                        candidate_json["chart_data"] = []
+
+                    return json.dumps(candidate_json, ensure_ascii=False)
+            except Exception as salvage_error:
+                logger.warning(f"Structured response salvage attempt failed: {salvage_error}")
+
             # Fallback: wrap the plain text response in JSON structure
             fallback_response = {
                 "summary": response_content,
